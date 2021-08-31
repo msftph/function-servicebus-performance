@@ -39,7 +39,7 @@ namespace FuncSbPerf.FunctionApp
             Task processor(Message m) => ProcessAsync(m, messageReceiver);
 
             //  Process 5 messages at a time (see TaskExtensions)
-            await messages.ForEachAsync(processor, 5);
+            await messages.ForEachAsync(processor, 10);
         }
 
         /// <summary>
