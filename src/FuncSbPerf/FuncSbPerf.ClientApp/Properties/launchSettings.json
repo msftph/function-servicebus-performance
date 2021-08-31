@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "FuncSbPerf.ClientApp": {
+      "commandName": "Project"
+    }
+  }
+}
