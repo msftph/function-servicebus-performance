@@ -42,5 +42,5 @@ resource "azurerm_cosmosdb_sql_container" "cosmos" {
     account_name        = azurerm_cosmosdb_account.cosmos.name
     database_name       = azurerm_cosmosdb_sql_database.cosmos.name
     partition_key_path  = "/id"
-    default_ttl         = 600
+    default_ttl         = 300
 }

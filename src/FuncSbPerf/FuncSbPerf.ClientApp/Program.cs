@@ -36,7 +36,7 @@ namespace FuncSbPerf.ClientApp
                 try
                 {
                     var myService = services.GetRequiredService<MyApplication>();
-                    await myService.Run(messageCount:100000, windowSize: 1000);
+                    await myService.Run(messageCount:1, windowSize: 1000);
                 }
                 catch (Exception ex)
                 {
