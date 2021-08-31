@@ -35,16 +35,11 @@ namespace FuncSbPerf.FunctionApp
         {
             _log.LogInformation($"SendMessage Called with {messages.Length} messages.");
 
-            var results = new List<Task>();
-            foreach (var message in messages)
-            {
-                var result = ProcessAsync(message, messageReceiver);
-                results.Add(result);
+            // Create a c# local function or lambda to wrap with a Func<T, Task> delegate
+            Task processor(Message m) => ProcessAsync(m, messageReceiver);
 
-                // need to await in loop because this is too fast
-                await Task.Delay(10);
-            }
-            await Task.WhenAll(results);
+            //  Process 5 messages at a time (see TaskExtensions)
+            await messages.ForEachAsync(processor, 5);
         }
 
         /// <summary>

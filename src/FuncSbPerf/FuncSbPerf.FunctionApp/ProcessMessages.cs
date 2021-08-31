@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
@@ -25,16 +27,12 @@ namespace FuncSbPerf.FunctionApp
             [ServiceBus(Globals.ServiceBus.ProcessedQueueName, Connection = Globals.ServiceBus.ConnectionStringName)]IAsyncCollector<Message> collector)
         {
             _log.LogInformation($"ProcessMessages Called with {messages.Length} messages.");
-            var tasks = new List<Task>();
-            foreach (var message in messages)
-            {
-                var task = ProcessAsync(message, messageReceiver, collector);
-                tasks.Add(task);
 
-                // need to await in the loop because this is too fast
-                await Task.Delay(10);
-            }
-            await Task.WhenAll(tasks);
+            // Create a c# local function or lambda to wrap with a Func<T, Task> delegate
+            Task processor(Message m) => ProcessAsync(m, messageReceiver, collector);
+
+            //  Process 5 messages at a time (see TaskExtensions)
+            await messages.ForEachAsync(processor, 5);
         }
 
         /// <summary>
